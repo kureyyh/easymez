@@ -1,0 +1,53 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+#  local:
+#    push: false
+  artifacts:
+    - image: registry.digitalocean.com/easymez/facebookwebhook
+      context: facebook-webhook
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: registry.digitalocean.com/easymez/message
+      context: message
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: registry.digitalocean.com/easymez/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+
+#apiVersion: skaffold/v2alpha3
+#kind: Config
+#deploy:
+#  kubectl:
+#    manifests:
+#      - ./infra/k8s/*
+#build:
+#  local:
+#    push: false
+#  artifacts:
+#    - image: kursat38tr/facebookwebhook
+#      context: facebook-webhook
+#      docker:
+#        dockerfile: Dockerfile
+#      sync:
+#        manual:
+#          - src: "src/**/*.ts"
+#            dest: .
